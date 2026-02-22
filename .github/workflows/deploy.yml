@@ -43,6 +43,14 @@ jobs:
       - name: Build
         run: npm run build
         working-directory: ${{ steps.appdir.outputs.dir }}
+      - name: Verify build output
+        run: |
+          echo "App dir: ${{ steps.appdir.outputs.dir }}"
+          ls -la "${{ steps.appdir.outputs.dir }}"
+          ls -la "${{ steps.appdir.outputs.dir }}/dist"
+          test -f "${{ steps.appdir.outputs.dir }}/dist/index.html"
+      - name: Add .nojekyll
+        run: touch "${{ steps.appdir.outputs.dir }}/dist/.nojekyll"
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ${{ steps.appdir.outputs.dir }}/dist
