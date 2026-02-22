@@ -25,12 +25,16 @@ jobs:
       - name: Detect app directory
         id: appdir
         run: |
-          if [ -f "study-planner-app/package.json" ]; then
+          if [ -f "study-planner-app/package.json" ] && [ -f "study-planner-app/index.html" ]; then
             echo "dir=study-planner-app" >> "$GITHUB_OUTPUT"
-          elif [ -f "package.json" ]; then
+          elif [ -f "package.json" ] && [ -f "index.html" ]; then
             echo "dir=." >> "$GITHUB_OUTPUT"
           else
-            echo "Could not find package.json in repo root or study-planner-app/"
+            echo "Could not find a Vite app directory (need package.json + index.html)."
+            echo "Repo root:"
+            ls -la
+            echo "study-planner-app/:"
+            ls -la study-planner-app || true
             exit 1
           fi
       - name: Install deps
